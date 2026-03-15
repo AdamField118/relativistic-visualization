@@ -17,6 +17,7 @@ const NUM_STARS  = 60;
 const SPREAD_XY  = 20.0;   // half-width in X and Y
 const SPAWN_ZMAX = 80.0;   // max distance ahead to spawn
 const CULL_Z     = 5.0;    // respawn when z falls below -CULL_Z
+const WORLD_SPEED = 40.0;  // world-units per second at beta=1
 
 const starPos = new Float32Array(NUM_STARS * 3);  // [x,y,z, ...]
 
@@ -31,8 +32,9 @@ function initStars() {
 }
 
 // Called each frame: respawn any star that has been "passed" (z gone negative).
-function updateStars() {
+function updateStars(dz) {
     for (let i = 0; i < NUM_STARS; i++) {
+        starPos[i*3+2] -= dz;
         if (starPos[i*3+2] < -CULL_Z) spawnStar(i);
     }
 }
@@ -51,6 +53,7 @@ let accelHeldTime = 0.0;
 let decelerating  = false;
 let decelHeldTime = 0.0;
 let lastTime      = 0;
+let showGrid = true;
 
 const keys = new Set();
 
@@ -124,6 +127,7 @@ function setupInput() {
             e.preventDefault();
             if (e.shiftKey) { startDecel(); } else { startAccel(); }
         }
+        if (e.code === 'KeyG') showGrid = !showGrid;
     });
     document.addEventListener('keyup', e => {
         keys.delete(e.code);
@@ -190,7 +194,8 @@ function render(timestamp) {
         beta = Math.max(beta - accelRate * dt, 0.0);
     }
 
-    updateStars();
+    const dz = beta * WORLD_SPEED * dt;
+    updateStars(dz);
 
     const gamma = 1.0 / Math.sqrt(Math.max(1 - beta*beta, 1e-10));
 
@@ -207,6 +212,7 @@ function render(timestamp) {
     gl.uniform1f(uLoc.u_time, t);
     gl.uniform1i(uLoc.u_numStars, NUM_STARS);
     gl.uniform3fv(uLoc.u_stars, starPos);
+    gl.uniform1i(gl.getUniformLocation(program, 'u_showGrid'), showGrid ? 1 : 0);
 
     gl.drawArrays(gl.TRIANGLES, 0, 6);
 

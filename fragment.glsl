@@ -12,6 +12,8 @@ uniform float u_time;
 uniform int   u_numStars;
 uniform vec3  u_stars[60];   // world-space 3D positions
 
+uniform bool u_showGrid;
+
 out vec4 fragColor;
 
 #define PI  3.14159265359
@@ -306,7 +308,8 @@ void main() {
     col += milkyWay(dR);
     col += starField(dR, beta, D);
     col += referenceStars(dR, beta, D);
-    col += celestialGrid(dR) * dopplerColourRGB(vec3(0.25, 0.45, 0.75), D);
+    if (u_showGrid)
+        col += celestialGrid(dR) * dopplerColourRGB(vec3(0.25, 0.45, 0.75), D);
 
     // Nearby 3D stars - checked against camera-frame ray d_world (not aberrated)
     // because their positions are in camera/world space, not rest-frame sky
