@@ -19,8 +19,6 @@ For a boost in an arbitrary direction $\hat{\boldsymbol{\beta}}$, decompose any 
 
 $$A^{0\prime} = \gamma(A^0 - \boldsymbol{\beta}\cdot\mathbf{A}), \qquad \mathbf{A}^{\prime}_\parallel = \gamma(\mathbf{A}_\parallel - \beta A^0\,\hat{\boldsymbol{\beta}}), \qquad \mathbf{A}^{\prime}_\perp = \mathbf{A}_\perp.$$
 
----
-
 ## 2. Photon 4-momentum
 
 A photon with angular frequency $\omega$ travelling in direction $\hat{\mathbf{n}}$ (unit vector *from source toward observer*) carries 4-momentum
@@ -33,8 +31,6 @@ $$\omega_{\text{obs}} = -k_\mu u^\mu \quad \text{(restore sign with metric signa
 
 This single scalar invariant encodes both the **Doppler effect** and **aberration**.
 
----
-
 ## 3. Relativistic Aberration (exact)
 
 ### Setup
@@ -42,7 +38,7 @@ This single scalar invariant encodes both the **Doppler effect** and **aberratio
 *Rest frame* $S$: the frame of the star field (inertial, stars approximately at rest).  
 *Camera frame* $S'$: the frame of the moving camera, with velocity $\boldsymbol{v} = \beta c\,\hat{\boldsymbol{\beta}}$ relative to $S$.
 
-We observe a photon arriving from rest-frame direction $\hat{\mathbf{d}}_S$ (pointing *away from* the source, i.e., the ray direction cast from the camera into the scene).  We want the corresponding camera-frame direction $\hat{\mathbf{d}}_{S'}$ — this is what gets mapped to a screen pixel.
+We observe a photon arriving from rest-frame direction $\hat{\mathbf{d}}_S$ (pointing *away from* the source, i.e., the ray direction cast from the camera into the scene).  We want the corresponding camera-frame direction $\hat{\mathbf{d}}_{S'}$ - this is what gets mapped to a screen pixel.
 
 Equivalently, given a camera-frame ray $\hat{\mathbf{d}}_{S'}$, we want the rest-frame direction $\hat{\mathbf{d}}_S$ to look up in the star catalogue.
 
@@ -73,17 +69,13 @@ followed by normalisation $\hat{\mathbf{d}}_S = \mathbf{d}_S / |\mathbf{d}_S|$.
 
 This is the exact formula used in `fragment.glsl :: aberrateRay()`.
 
-> **Geometric interpretation.**  As $\beta \to 1$, even rays originally at $90°$ to the velocity get folded forward.  The entire sky collapses into a forward cone of half-angle $\sim 1/\gamma$ — the **relativistic headlight effect** or *aberration cone*.
-
 ### Implementation note (camera vs. world frame)
 
 In this simulator the camera *flies* in world $+Z$ but can *look* in any direction.  The velocity 4-vector is always $\hat{\boldsymbol{\beta}} = \hat{z}$ in world space.  The camera rotation matrix $M$ maps camera-space ray coordinates to world space:
 
 $$\hat{\mathbf{d}}_{\text{world}} = M\,\hat{\mathbf{d}}_{\text{screen}}.$$
 
-We then apply the aberration formula entirely in world space with $\hat{\boldsymbol{\beta}} = \hat{z}$.  This is equivalent to what the user suggested: *multiply by the rotation matrix of the plane in the fragment shader* — the rotation is folded into the construction of $\hat{\mathbf{d}}_{\text{world}}$ before aberration is applied.
-
----
+We then apply the aberration formula entirely in world space with $\hat{\boldsymbol{\beta}} = \hat{z}$.  This is equivalent to what the user suggested: *multiply by the rotation matrix of the plane in the fragment shader* - the rotation is folded into the construction of $\hat{\mathbf{d}}_{\text{world}}$ before aberration is applied.
 
 ## 4. Relativistic Doppler Effect (exact)
 
@@ -104,7 +96,7 @@ $$D \equiv \frac{\omega_{S'}}{\omega_S}
 
 $$\boxed{D = \frac{1}{\gamma\,(1 - \beta\,d'_\parallel)}}$$
 
-where $d'_\parallel = \hat{\mathbf{d}}_{S'}\cdot\hat{\boldsymbol{\beta}}$ is the projection of the *camera-frame* ray onto the velocity direction.
+where $ d^{'}_{\parallel} = \hat{\mathbf{d}}_{S'}\cdot\hat{\boldsymbol{\beta}} $ is the projection of the *camera-frame* ray onto the velocity direction.
 
 **Limiting cases:**
 
@@ -116,8 +108,6 @@ where $d'_\parallel = \hat{\mathbf{d}}_{S'}\cdot\hat{\boldsymbol{\beta}}$ is the
 
 Note: the transverse direction gives a *redshift* even at 90°, a purely relativistic effect with no classical analogue.
 
----
-
 ## 5. Relativistic Beaming (exact)
 
 The *intensity* (energy flux per unit solid angle) transforms as
@@ -126,9 +116,9 @@ $$I_{S'} = D^4\, I_S,$$
 
 where the four powers of $D$ arise from:
 
-- $D^1$ — the photon energy blueshift $\omega_{S'} = D\,\omega_S$
-- $D^1$ — the photon arrival rate (time dilation)
-- $D^2$ — the solid angle compression $d\Omega_{S'} = D^{-2}\,d\Omega_S$ (aberration of solid angle)
+- $D^1$ - the photon energy blueshift $\omega_{S'} = D\,\omega_S$
+- $D^1$ - the photon arrival rate (time dilation)
+- $D^2$ - the solid angle compression $d\Omega_{S'} = D^{-2}\,d\Omega_S$ (aberration of solid angle)
 
 **Derivation of solid angle factor.**  The differential solid angle element transforms as
 
@@ -142,13 +132,11 @@ so $d\Omega_S = D^{-2}\,d\Omega_{S'}$.  Combined with the energy factors, $I_{S'
 
 This is the **headlight effect**: forward emission ($D > 1$) is dramatically brightened.  At $\beta = 0.9c$, $D_{\text{fwd}} \approx 4.4$, so forward intensity increases by $4.4^4 \approx 374\times$.
 
----
-
 ## 6. Penrose-Terrell Rotation
 
 A remarkable result: a **sphere** moving at relativistic speed still *appears* as a circle (not a squashed ellipse), merely *rotated* by the Penrose-Terrell angle.
 
-The reason is that length contraction is exactly cancelled by the retarded-time correction — photons from the far edge of the sphere left slightly *earlier*, when the sphere was further away, precisely compensating the contraction.
+The reason is that length contraction is exactly cancelled by the retarded-time correction - photons from the far edge of the sphere left slightly *earlier*, when the sphere was further away, precisely compensating the contraction.
 
 For a sphere of angular radius $\alpha$ at rest subtending angle $\alpha_0$:
 
@@ -157,8 +145,6 @@ $$\sin\alpha = \frac{\sin\alpha_0}{D}, \qquad \text{(apparent size change from b
 The rotation angle $\psi$ satisfies $\tan\psi = \beta\sin\theta_{S'}/\gamma$, where $\theta_{S'}$ is the angle between the velocity and the line of sight.
 
 **Practical consequence for this simulator:** extended sources (not points) would need ray-tracing with retarded positions, not just the aberration formula applied to a direction.  Point stars are correctly handled by the direction-only approach.
-
----
 
 ## 7. Camera Model
 
@@ -181,8 +167,6 @@ The camera matrix $M = [\hat{\boldsymbol{R}} \mid \hat{\boldsymbol{U}} \mid \hat
 
 $$\hat{\mathbf{d}}_{\text{world}} = M\,\hat{\mathbf{d}}_{\text{cam}} = u\,\hat{\boldsymbol{R}} + v\,\hat{\boldsymbol{U}} + f\,\hat{\boldsymbol{F}}.$$
 
----
-
 ## 8. Composing Rotation and Aberration
 
 The full pipeline per pixel is:
@@ -191,8 +175,6 @@ $$\underbrace{(u,v)}_{\text{screen}} \xrightarrow{\text{pinhole}} \hat{\mathbf{d
 
 Key insight: because the camera rotation is applied *before* aberration, and aberration is applied in world space with $\hat{\boldsymbol{\beta}} = \hat{z}$ fixed, rotating the camera is equivalent to the user's suggestion of multiplying by the rotation matrix in the fragment shader.  The rotation matrix and the aberration matrix do **not** commute in general, but since aberration acts on the world-space ray and rotation maps screen to world, the correct order is $M$ first, aberration second.
 
----
-
 ## 9. Approximations Applied for Real-Time Rendering
 
 All physics in §§1–7 is exact.  We make only the following concessions to real-time constraints:
@@ -200,12 +182,10 @@ All physics in §§1–7 is exact.  We make only the following concessions to re
 | Approximation | Where | Physical error |
 |---|---|---|
 | Stars at $r = \infty$ (skybox) | starField, referenceStars | Parallax shift ignored; correct for $r \gg vt$ |
-| No time retardation for nearby objects | — | Penrose-Terrell rotation not applied to point stars (which are isotropic anyway) |
-| Exaggerated Doppler colour mapping (×80 scale) | `applyDoppler()` | Channel redistribution is exaggerated; $D$ itself is exact |
+| No time retardation for nearby objects | - | Penrose-Terrell rotation not applied to point stars (which are isotropic anyway) |
+| Exaggerated Doppler colour mapping ($\times 80$ scale) | `applyDoppler()` | Channel redistribution is exaggerated; $D$ itself is exact |
 | No aberration of the camera's *own* orientation | buildCamMatrix | At $\beta < 0.01c$, this is $O(\beta^2) < 10^{-4}$ |
 | Float32 precision | Throughout | Rounding errors $\sim 10^{-7}$; negligible for $\beta < 0.99$ |
-
----
 
 ## 10. Non-Relativistic Limit
 
@@ -220,7 +200,3 @@ $$\delta\theta \approx -\beta\sin\theta',$$
 which agrees with the **classical stellar aberration** formula used in observational astronomy.  The maximum shift is $\beta$ radians, occurring at $\theta' = 90°$.
 
 At $\beta = 0.01c$, $\delta\theta_{\text{max}} \approx 0.01\,\text{rad} \approx 0.57°$.  This is subtle but measurable in a star field with known positions.  Raise `BETA_MAX` to $0.5$ or higher in `main.js` to enter the manifestly relativistic regime.
-
----
-
-*Adam Field / LightCone — see README.md for running instructions.*

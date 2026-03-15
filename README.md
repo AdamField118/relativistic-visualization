@@ -10,14 +10,12 @@ All effects are derived from the Lorentz transformation of the photon 4-momentum
 
 | Effect | Formula | Status |
 |---|---|---|
-| Relativistic aberration | $d'_\parallel = (d_\parallel - \beta)/(1 - \beta d_\parallel)$ | Exact |
-| Relativistic Doppler | $D = 1/[\gamma(1 - \beta d_\parallel)]$ | Exact |
+| Relativistic aberration | $ d^{'}_{\parallel} = \frac{d_{\parallel} - \beta}{1 - \beta d_\parallel}$ | Exact |
+| Relativistic Doppler | $D = \frac{1}{\gamma(1 - \beta d_\parallel)}$ | Exact |
 | Relativistic beaming | $I_{\text{obs}} = D^4 I_{\text{src}}$ | Exact |
-| Doppler colour shift | Channel redistribution scaled $\times 80$ | Exaggerated for $\text{visibility}^{-1}$ |
+| Doppler colour shift | Channel redistribution scaled $\times 80$ | Exaggerated for $\text{visibility}^{1}$ |
 
 $^{1}$ The mathematical Doppler factor $D$ is exact.  The *visual colour mapping* is scaled up by $\times 80$ so the $\sim 1\%$ frequency shift at $\beta = 0.01c$ is perceptible on screen.  See `MATH.md` §9 and `DOPPLER_VIS_SCALE` in `fragment.glsl`.
-
-For the full derivation see **[MATH.md](MATH.md)**.
 
 ## Controls
 
