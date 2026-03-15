@@ -10,7 +10,7 @@ All effects are derived from the Lorentz transformation of the photon 4-momentum
 
 | Effect | Formula | Status |
 |---|---|---|
-| Relativistic aberration | $ d^{'}_{\parallel} = \frac{d_{\parallel} - \beta}{1 - \beta d_\parallel}$ | Exact |
+| Relativistic aberration | $ d^{’}_{\parallel} = \frac{d_{\parallel} - \beta}{1 - \beta d_\parallel}$ | Exact |
 | Relativistic Doppler | $D = \frac{1}{\gamma(1 - \beta d_\parallel)}$ | Exact |
 | Relativistic beaming | $I_{\text{obs}} = D^4 I_{\text{src}}$ | Exact |
 | Doppler colour shift | Channel redistribution scaled $\times 80$ | Exaggerated for $\text{visibility}^{1}$ |

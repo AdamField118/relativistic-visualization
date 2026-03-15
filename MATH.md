@@ -96,7 +96,7 @@ $$D \equiv \frac{\omega_{S'}}{\omega_S}
 
 $$\boxed{D = \frac{1}{\gamma\,(1 - \beta\,d'_\parallel)}}$$
 
-where $ d^{'}_{\parallel} = \hat{\mathbf{d}}_{S'}\cdot\hat{\boldsymbol{\beta}} $ is the projection of the *camera-frame* ray onto the velocity direction.
+where $ d^{’}_{\parallel} = \hat{\mathbf{d}}_{S'}\cdot\hat{\boldsymbol{\beta}} $ is the projection of the *camera-frame* ray onto the velocity direction.
 
 **Limiting cases:**
 
