@@ -109,28 +109,28 @@ vec3 dopplerColourRGB(vec3 c, float D) {
 //  The query ray dir must lie within angularWidth of the chord sd->streakEnd
 //  for the pixel to be lit.
 
-float streakBrightness(vec3 dir, vec3 sd, float beta, float angularWidth) {
-    if (beta < 1e-4) {
-        // No streak at rest - just a point
-        float ang = acos(clamp(dot(dir, sd), -1.0, 1.0));
+// d_world : camera-frame query ray
+// sd_rest : rest-frame star position
+// Streak runs from sd_rest (apparent position at beta=0)
+// to sd_cam (apparent position at current beta), in camera frame.
+float streakBrightness(vec3 d_world, vec3 sd_rest, float beta, float gamma, float angularWidth) {
+    // rest -> camera boost  (+beta, sign opposite of aberrateRay)
+    float sd_par  = sd_rest.z;
+    vec3  sd_perp = sd_rest - sd_par * vec3(0.0, 0.0, 1.0);
+    float denom   = 1.0 + beta * sd_par;
+    vec3  sd_cam  = normalize(((sd_par + beta) / denom) * vec3(0.0, 0.0, 1.0)
+                              + sd_perp / (gamma * denom));
+
+    vec3  chord  = sd_cam - sd_rest;
+    float chord2 = dot(chord, chord);
+    if (chord2 < 1e-8) {
+        float ang = acos(clamp(dot(d_world, sd_cam), -1.0, 1.0));
         return smoothstep(angularWidth, 0.0, ang);
     }
-
-    // Streak tip: how far toward forward pole the star has been swept
-    float streakT = clamp(beta * 3.5, 0.0, 0.995);
-    vec3  fwd     = vec3(0.0, 0.0, 1.0);
-    vec3  tip     = normalize(mix(sd, fwd, streakT));
-
-    // Distance from dir to the line segment sd -> tip (chord on unit sphere)
-    vec3  chord   = tip - sd;
-    float chord2  = dot(chord, chord);
-    float t       = (chord2 < 1e-8) ? 0.0 : clamp(dot(dir - sd, chord) / chord2, 0.0, 1.0);
-    vec3  closest = normalize(sd + t * chord);
-
-    float ang     = acos(clamp(dot(dir, closest), -1.0, 1.0));
-
-    // Brightness: full at the base (star position), fades toward tip
-    float fade = 1.0 - t * 0.6;
+    float t       = clamp(dot(d_world - sd_rest, chord) / chord2, 0.0, 1.0);
+    vec3  closest = normalize(sd_rest + t * chord);
+    float ang     = acos(clamp(dot(d_world, closest), -1.0, 1.0));
+    float fade    = 0.4 + 0.6 * t;  // brightest at head (current position)
     return smoothstep(angularWidth, 0.0, ang) * fade;
 }
 
@@ -174,10 +174,10 @@ float brightStarTemp(int i) {
 }
 
 // dir: rest-frame ray.  Render 12 reference stars with streaks.
-vec3 referenceStars(vec3 dir, float beta, float D) {
+vec3 referenceStars(vec3 d_world, float beta, float gamma, float D) {
     vec3 col = vec3(0.0);
     for (int i = 0; i < 12; i++) {
-        float br = streakBrightness(dir, brightStarDir(i), beta, 0.018);
+        float br = streakBrightness(d_world, brightStarDir(i), beta, gamma, 0.018);
         if (br > 0.001) {
             col += br * 3.0 * dopplerColour(brightStarTemp(i), D);
         }
@@ -186,10 +186,12 @@ vec3 referenceStars(vec3 dir, float beta, float D) {
 }
 
 // Procedural background star field with streaks.
-vec3 starField(vec3 dir, float beta, float D) {
+// dR   : rest-frame ray, used to enumerate which stars are near this pixel
+// d_world : camera-frame ray, used for streak geometry
+vec3 starField(vec3 d_world, vec3 dR, float beta, float gamma, float D) {
     vec3  col = vec3(0.0);
-    float u   = atan(dir.z, dir.x) / TAU + 0.5;
-    float v   = asin(clamp(dir.y, -0.9999, 0.9999)) / PI + 0.5;
+    float u   = atan(dR.z, dR.x) / TAU + 0.5;
+    float v   = asin(clamp(dR.y, -0.9999, 0.9999)) / PI + 0.5;
 
     for (int layer = 0; layer < 2; layer++) {
         float fL     = float(layer);
@@ -211,7 +213,7 @@ vec3 starField(vec3 dir, float beta, float D) {
                 vec3  sd  = vec3(cos(sP)*cos(sT), sin(sP), cos(sP)*sin(sT));
 
                 float sz2 = sz * (1.0 + hash(seed + vec2(200.0)));
-                float br  = streakBrightness(dir, sd, beta, sz2);
+                float br  = streakBrightness(d_world, sd, beta, gamma, sz2);
                 if (br > 0.001) {
                     float t  = hash(seed + vec2(333.0, 777.0));
                     float Ts = exp(log(3000.0) + t * log(10.0));
@@ -306,8 +308,8 @@ void main() {
     // Accumulate scene
     vec3 col = vec3(0.0);
     col += milkyWay(dR);
-    col += starField(dR, beta, D);
-    col += referenceStars(dR, beta, D);
+    col += starField(d_world, dR, beta, gamma, D);
+    col += referenceStars(d_world, beta, gamma, D);
     if (u_showGrid)
         col += celestialGrid(dR) * dopplerColourRGB(vec3(0.25, 0.45, 0.75), D);
 
