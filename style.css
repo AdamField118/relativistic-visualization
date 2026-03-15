@@ -1,0 +1,159 @@
+/*
+   style.css
+*/
+
+/*  Reset / base */
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+    --bg:          #000;
+    --panel-bg:    rgba(0, 8, 20, 0.75);
+    --panel-border:rgba(60, 130, 200, 0.30);
+    --text:        #c8dff0;
+    --text-dim:    #607080;
+    --text-title:  #4aa8e0;
+    --fwd-color:   #50d0ff;
+    --bwd-color:   #ff8040;
+    --bar-bg:      rgba(40, 80, 120, 0.40);
+    --font:        'Courier New', Courier, monospace;
+    --font-size:   13px;
+}
+
+html, body {
+    width: 100%; height: 100%;
+    background: var(--bg);
+    overflow: hidden;
+    font-family: var(--font);
+    font-size: var(--font-size);
+    color: var(--text);
+}
+
+/*  Canvas  */
+
+#glCanvas {
+    display: block;
+    position: fixed;
+    inset: 0;
+    width: 100vw;
+    height: 100vh;
+}
+
+/*  HUD container  */
+
+#hud {
+    position: fixed;
+    inset: 0;
+    pointer-events: none;
+    z-index: 5;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 10px;
+    padding: 16px;
+}
+
+/*  Generic panel  */
+
+.hud-panel {
+    background:   var(--panel-bg);
+    border:       1px solid var(--panel-border);
+    border-radius: 5px;
+    padding:      10px 14px;
+    min-width:    200px;
+    backdrop-filter: blur(4px);
+}
+
+.panel-title {
+    color:          var(--text-title);
+    font-size:      0.72rem;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    margin-bottom:  6px;
+}
+
+.divider {
+    height: 1px;
+    background: var(--panel-border);
+    margin: 8px 0;
+}
+
+/* Speedometer */
+
+#speed-value {
+    font-size:   1.35rem;
+    font-weight: bold;
+    color:       #e0f0ff;
+    letter-spacing: 0.04em;
+    margin-bottom: 6px;
+}
+
+#speed-bar-track {
+    width:         100%;
+    height:        5px;
+    background:    var(--bar-bg);
+    border-radius: 3px;
+    overflow:      hidden;
+    margin-bottom: 6px;
+}
+
+#speed-bar {
+    height:        100%;
+    width:         0%;
+    background:    hsl(200, 80%, 55%);
+    border-radius: 3px;
+    transition:    background 0.3s;
+}
+
+#gamma-value {
+    color:       var(--text-dim);
+    font-size:   0.85rem;
+    margin-bottom: 2px;
+}
+
+/*  Doppler readout  */
+
+.doppler-row {
+    display:     flex;
+    align-items: baseline;
+    gap:         8px;
+    margin-top:  4px;
+}
+
+.label       { font-size: 0.78rem; color: var(--text-dim); width: 40px; }
+.fwd-label   { color: var(--fwd-color); }
+.bwd-label   { color: var(--bwd-color); }
+.fwd-val     { color: var(--fwd-color); font-weight: bold; }
+.bwd-val     { color: var(--bwd-color); font-weight: bold; }
+
+/*  Controls legend  */
+
+#controls { margin-top: 2px; }
+
+.ctrl-row {
+    display:     flex;
+    align-items: center;
+    gap:         5px;
+    margin-top:  5px;
+    flex-wrap:   wrap;
+}
+
+.ctrl-row span { color: var(--text-dim); font-size: 0.8rem; }
+
+.ctrl-desc {
+    color:       var(--text) !important;
+    margin-left: 4px;
+}
+
+kbd {
+    display:      inline-block;
+    background:   rgba(255, 255, 255, 0.08);
+    border:       1px solid rgba(255, 255, 255, 0.18);
+    border-bottom: 2px solid rgba(255, 255, 255, 0.25);
+    border-radius: 3px;
+    padding:      1px 5px;
+    font-family:  var(--font);
+    font-size:    0.75rem;
+    color:        #dde;
+    white-space:  nowrap;
+}

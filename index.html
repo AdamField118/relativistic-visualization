@@ -1,0 +1,53 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Relativistic Sim</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <!-- WebGL canvas -->
+    <canvas id="glCanvas"></canvas>
+
+    <!-- HUD -->
+    <div id="hud">
+
+        <!-- Speedometer -->
+        <section class="hud-panel" id="speedometer">
+            <div class="panel-title">VELOCITY</div>
+            <div id="speed-value">0.00000 c</div>
+            <div id="speed-bar-track">
+                <div id="speed-bar"></div>
+            </div>
+            <div id="gamma-value">gamma = 1.00000</div>
+
+            <div class="divider"></div>
+
+            <div class="panel-title">DOPPLER  D = f<sub>obs</sub>/f<sub>emit</sub></div>
+            <div class="doppler-row">
+                <span class="label fwd-label">fwd</span>
+                <span id="doppler-fwd" class="fwd-val">1.00000</span>
+            </div>
+            <div class="doppler-row">
+                <span class="label bwd-label">bwd</span>
+                <span id="doppler-bwd" class="bwd-val">1.00000</span>
+            </div>
+        </section>
+
+        <!-- Controls legend -->
+        <section class="hud-panel" id="controls">
+            <div class="panel-title">CONTROLS</div>
+            <div class="ctrl-row"><kbd>SPACE</kbd><span class="ctrl-desc">accelerate (hold)</span></div>
+            <div class="ctrl-row"><kbd>SHIFT</kbd><kbd>SPACE</kbd><span class="ctrl-desc">decelerate (hold)</span></div>
+            <div class="ctrl-row"><kbd>W</kbd><kbd>S</kbd><span class="ctrl-desc">look up / down</span></div>
+            <div class="ctrl-row"><kbd>A</kbd><kbd>D</kbd><span class="ctrl-desc">look left / right</span></div>
+            <div class="ctrl-row"><kbd>↑</kbd><kbd>↓</kbd><kbd>←</kbd><kbd>→</kbd><span class="ctrl-desc">look</span></div>
+        </section>
+
+    </div>
+
+    <script src="main.js" type="module"></script>
+</body>
+</html>
